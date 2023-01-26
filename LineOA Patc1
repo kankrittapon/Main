@@ -1,0 +1,40 @@
+function doPost(b) {
+  var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1U_64WvJ2B6FAUz1S_OLDgj0RcOfTye0D-cflIOI2TRA/edit#gid=0");
+  var sheetx = ss.getSheetByName("Data Dump"); 
+  var data = JSON.parse(b.postData.contents)
+  var userMsg = data.originalDetectIntentRequest.payload.data.message.text;
+  var userCommand = userMsg.split(",");
+  var sheet = ss.getSheetByName(userCommand[0]);
+  var values = sheetx.getRange(2, 1, sheetx.getLastRow(),sheetx.getLastColumn()).getValues();
+for(var i = 0;i<values.length; i++){  
+  if(values[i][0] == userMsg ){
+      i=i+2;
+    var Data1 = sheetx.getRange(i,1).getValue(); //หมายเลข
+    var Data2 = sheetx.getRange(i,2).getValue(); //สถานที่
+    var Data3 = sheetx.getRange(i,3).getValue(); //MDF
+    var Data4 = sheetx.getRange(i,4).getValue(); //เคเบิล1
+    var Data5 = sheetx.getRange(i,5).getValue(); //เคเบิล2
+    var Data6 = sheetx.getRange(i,6).getValue(); //เคเบิล3
+    var Data7 = sheetx.getRange(i,7).getValue(); //เคเบิล4
+    var Data8 = sheetx.getRange(i,8).getValue(); //เคเบิล5
+    var Data9 = sheetx.getRange(i,9).getValue(); //UniqueID
+   
+     var result = {"fulfillmentMessages": [{"platform": "line","type": 4,"payload" : {"line":  {"type": "text","text": "หมายเลข : " +Data1+"\nสถานที่ : " +Data2+"\nMDF : " +Data3+"\nเคเบิล1 : " +Data4+"\nเคเบิล2 : " +Data5+"\nเคเบิล3 : " +Data6+"\nเคเบิล : " +Data7+"\nเคเบิล5 : " +Data8+"\nเมื่อเสร็จสิ้นให้พิพม์ :-,+,ยกเลิกค้นหา "}}}]}
+      
+    var replyJSON = ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+    return replyJSON;}
+ if(values[i][0].toString() == userCommand[1])
+ {
+   sheet.getRange(i+2,3).setValue(userCommand[2]);
+   sheet.getRange(i+2,4).setValue(userCommand[3]);
+   sheet.getRange(i+2,5).setValue(userCommand[4]);
+   sheet.getRange(i+2,6).setValue(userCommand[5]);
+   sheet.getRange(i+2,7).setValue(userCommand[6]);
+var result = { "fulfillmentMessages": [{"platform": "line","type": 4,"payload" : {"line": {"type": "text","text": "แก้ไขทะเบียนเรียบร้อย"}}}]}
+var replyJSON = ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+return replyJSON;
+}}
+var result = { "fulfillmentMessages": [{"platform": "line","type": 4,"payload" : {"line": {"type": "text","text": "ไม่พบหมายเลขนี้"}}}]}
+var replyJSON = ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+return replyJSON;
+}
