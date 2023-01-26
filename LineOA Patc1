@@ -1,10 +1,10 @@
 function doPost(b) {
-  var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1U_64WvJ2B6FAUz1S_OLDgj0RcOfTye0D-cflIOI2TRA/edit#gid=0");
-  var sheetx = ss.getSheetByName("Data Dump"); 
+  var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1U_64WvJ2B6FAUz1S_OLDgj0RcOfTye0D-cflIOI2TRA/edit#gid=0");  // << ตรงส่วนนี้ให้เอา Link Google Sheet ของเรา
+  var sheetx = ss.getSheetByName("Data Dump"); //<< ชื่อของแผ่นงานที่เก็บข้อมูลไว้
   var data = JSON.parse(b.postData.contents)
   var userMsg = data.originalDetectIntentRequest.payload.data.message.text;
-  var userCommand = userMsg.split(",");
-  var sheet = ss.getSheetByName(userCommand[0]);
+  var userCommand = userMsg.split(","); //<< รับข้อมูลจาก Line (ข้อความที่เราส่งเข้าไปในLine)
+  var sheet = ss.getSheetByName(userCommand[0]); // << ส่วนของการแก้ไขทะเบียน
   var values = sheetx.getRange(2, 1, sheetx.getLastRow(),sheetx.getLastColumn()).getValues();
 for(var i = 0;i<values.length; i++){  
   if(values[i][0] == userMsg ){
@@ -23,7 +23,7 @@ for(var i = 0;i<values.length; i++){
       
     var replyJSON = ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
     return replyJSON;}
- if(values[i][0].toString() == userCommand[1])
+ if(values[i][0].toString() == userCommand[1]) //ส่วนนี้เป็นการแก้ไขทะเบียน
  {
    sheet.getRange(i+2,3).setValue(userCommand[2]);
    sheet.getRange(i+2,4).setValue(userCommand[3]);
