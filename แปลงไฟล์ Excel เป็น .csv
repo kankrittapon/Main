@@ -1,0 +1,30 @@
+Sub CopyDataToGS()
+
+Application.ScreenUpdating = False
+Application.DisplayAlerts = False
+
+    'Tells Excel contents are strings
+    Dim DataWB As String
+    Dim SaveLocation As String
+    
+    'Looks up data in the Settings sheet'
+    DataWB = Sheets("Settings").Range("B1").Value
+    SaveLocation = Sheets("Settings").Range("B2").Value & "\" & Sheets("Settings").Range("B3").Value & ".csv"
+    
+    'Opens Data sheet
+    Workbooks.Open DataWB
+    
+    'Saves CSV file into Backup and Sync Workbook
+    ActiveWorkbook.SaveAs Filename:= _
+    SaveLocation _
+    , FileFormat:=xlCSVUTF8, CreateBackup:=False
+    ActiveWindow.Close
+   
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
+    
+End Sub
+Private Sub Workbook_Open()
+'// ??????????????????????????? Trigger ?????????????????????????????????
+    Call CopyDataToGS
+End Sub
